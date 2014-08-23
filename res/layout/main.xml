@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <!-- 显示内容 -->
+    
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:background="#AEAEAE" >
+        
+        <fragment
+        android:id="@+id/wallfragment"
+        android:name="com.oxygen.wall.WallFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+
+
+    <fragment
+        android:id="@+id/favourfragment"
+        android:name="com.oxygen.wall.FavourFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+    
+<!-- 地图的RadarFragment在代码中使用动态加载，否则Activity加载缓慢 -->
+    
+    <fragment
+        android:id="@+id/myfragment"
+        android:name="com.oxygen.wall.MyFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+    </FrameLayout>
+    
+    
+    <!-- 底部菜单 -->
+
+    <FrameLayout
+        android:id="@+id/frameLayout_tab"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/skin_tabbar_bg" >
+
+        <LinearLayout
+            android:id="@+id/linearlayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="0dp"
+            android:background="@drawable/skin_tabbar_bg"
+            android:gravity="center_horizontal" >
+
+            <!-- Walls 留言板 -->
+
+            <FrameLayout
+                android:id="@+id/framelayout_wall"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_framelayout_btn" >
+
+                <ImageView
+                    android:id="@+id/image_wall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:src="@drawable/tab_walls_btn" />
+
+                <TextView
+                    android:id="@+id/tv_wall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="1dp"
+                    android:text="Walls"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/wall_image_line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/tab_bg_line_selector" />
+            </FrameLayout>
+            <!-- Radar 定位 -->
+
+            <FrameLayout
+                android:id="@+id/framelayout_radar"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_framelayout_btn" >
+
+                <ImageView
+                    android:id="@+id/image_radar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:src="@drawable/tab_radar_btn" />
+
+                <TextView
+                    android:id="@+id/tv_radar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="1dp"
+                    android:text="Radar"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/radar_image_line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/tab_bg_line_selector" />
+            </FrameLayout>
+            <!-- AR -->
+
+            <FrameLayout
+                android:id="@+id/framelayout_ar"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:background="@drawable/skin_tabbar_bg" >
+
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/skin_tabbar_bg_middle_black" >
+
+                    <FrameLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/skin_tabbar_btn_middle_white" >
+
+                        <ImageView
+                            android:id="@+id/image_ar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="2dip"
+                            android:src="@drawable/tab_middle_btn" />
+                    </FrameLayout>
+                </FrameLayout>
+            </FrameLayout>
+            <!-- Favourites 收藏 -->
+
+            <FrameLayout
+                android:id="@+id/framelayout_favour"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_framelayout_btn" >
+
+                <ImageView
+                    android:id="@+id/image_favour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:src="@drawable/tab_favour_btn" />
+
+                <TextView
+                    android:id="@+id/tv_favour"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="1dp"
+                    android:text="Favour"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/favour_image_line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/tab_bg_line_selector" />
+            </FrameLayout>
+            <!-- My 我的 -->
+
+            <FrameLayout
+                android:id="@+id/framelayout_my"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/tab_framelayout_btn" >
+
+                <ImageView
+                    android:id="@+id/image_my"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top|center"
+                    android:src="@drawable/tab_my_btn" />
+
+                <TextView
+                    android:id="@+id/tv_my"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="1dp"
+                    android:text="My"
+                    android:textColor="#ffffff"
+                    android:textSize="12sp" />
+
+                <ImageView
+                    android:id="@+id/my_image_line"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/tab_bg_line_selector" />
+            </FrameLayout>
+        </LinearLayout>
+    </FrameLayout>
+
+</RelativeLayout>

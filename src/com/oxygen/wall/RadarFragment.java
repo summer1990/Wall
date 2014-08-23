@@ -174,5 +174,7 @@ public class RadarFragment extends Fragment {
 			aroundWalls.add(new WallInfo(1, 007, new LatLng(39.98871, 116.43234), 1000));
 		}
 
-	
+		public void initOverlay(){
+			
+		}
 }

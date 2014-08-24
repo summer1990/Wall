@@ -1,4 +1,6 @@
-package com.oxygen.wall;
+package com.oxygen.main;
+
+import com.oxygen.wall.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * @ClassName MainActivity
+ * @Description 主界面
+ * @author oxygen
+ * @email oxygen0106@163.com
+ * @date 2014-8-14 下午1:18:37
+ */
 public class MainActivity extends FragmentActivity implements
 		View.OnClickListener {
 
@@ -45,21 +54,21 @@ public class MainActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
+		this.requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);// 自定义标题栏模式
 		setContentView(R.layout.main);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
-				R.layout.title_bar);//自定义标题栏
+				R.layout.title_bar);// 加载自定义标题栏
 
-		titleText = (TextView) findViewById(R.id.title_tv);
+		titleText = (TextView) findViewById(R.id.title_tv);// 标题栏TextView
 
-		wallFrameLayout = (FrameLayout) findViewById(R.id.framelayout_wall);
+		wallFrameLayout = (FrameLayout) findViewById(R.id.framelayout_wall);// 菜单按钮
 		radarFrameLayout = (FrameLayout) findViewById(R.id.framelayout_radar);
 		favourFrameLayout = (FrameLayout) findViewById(R.id.framelayout_favour);
 		myFrameLayout = (FrameLayout) findViewById(R.id.framelayout_my);
 		arFrameLayout = (FrameLayout) findViewById(R.id.framelayout_ar);
-		
-		wallFrameLayout.setTag(1);
-		wallFrameLayout.setOnClickListener(this);
+
+		wallFrameLayout.setTag(1);// 按钮添加标签
+		wallFrameLayout.setOnClickListener(this);// 按钮添加监听
 		radarFrameLayout.setTag(2);
 		radarFrameLayout.setOnClickListener(this);
 		favourFrameLayout.setTag(3);
@@ -69,38 +78,40 @@ public class MainActivity extends FragmentActivity implements
 		arFrameLayout.setTag(5);
 		arFrameLayout.setOnClickListener(this);
 
-		wallImageView = (ImageView) findViewById(R.id.image_wall);
+		wallImageView = (ImageView) findViewById(R.id.image_wall);// 按钮图片
 		radarImageView = (ImageView) findViewById(R.id.image_radar);
 		favourImageView = (ImageView) findViewById(R.id.image_favour);
 		myImageView = (ImageView) findViewById(R.id.image_my);
 		arImageView = (ImageView) findViewById(R.id.image_ar);
 
-		wallImageLine = (ImageView) findViewById(R.id.wall_image_line);
+		wallImageLine = (ImageView) findViewById(R.id.wall_image_line);// 按钮下划线
 		radarImageLine = (ImageView) findViewById(R.id.radar_image_line);
 		favourImageLine = (ImageView) findViewById(R.id.favour_image_line);
 		myImageLine = (ImageView) findViewById(R.id.my_image_line);
 
-		radarFragment = new RadarFragment();
+		radarFragment = new RadarFragment();// 使用代码初始化radarFragment，动态加载
 
-		// 默认初始化WallFragmnt
-		titleText.setText("Wall");
-		fragmentManager = getSupportFragmentManager();
-
-		wallFragment = fragmentManager.findFragmentById(R.id.wallfragment);
-		// radarFragment = fragmentManager.findFragmentById(R.id.radarfragment);//改为动态加载
+		titleText.setText("Wall");// 设置TitleBar的TextView
+		fragmentManager = getSupportFragmentManager();// 获得FragmentManager
+		wallFragment = fragmentManager.findFragmentById(R.id.wallfragment);// 加载Fragment
+		// fragmentManager.findFragmentById(R.id.radarfragment);//改为动态加载,见上
 		favourFragment = fragmentManager.findFragmentById(R.id.favourfragment);
 		myFragment = fragmentManager.findFragmentById(R.id.myfragment);
 
 		fragmentTransaction = fragmentManager.beginTransaction()
-				.hide(wallFragment).hide(favourFragment).hide(myFragment);
-		fragmentTransaction.show(wallFragment).commit();
+				.hide(wallFragment).hide(radarFragment).hide(favourFragment)
+				.hide(myFragment);//隐藏Fragment
+		fragmentTransaction.show(wallFragment).commit();//默认显示wallFragment
 	}
 
+	/**
+	* @Description 菜单按钮监听事件回调方法  
+	*/
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		int tag = (Integer) v.getTag();
-		// fragmentTransaction只能commit()一次,此处重新获得一个局部对象来commit()
+		// 一个fragmentTransaction对象只能commit()一次,此处重新获得一个对象来commit()
 		fragmentTransaction = fragmentManager.beginTransaction()
 				.hide(wallFragment).hide(radarFragment).hide(favourFragment)
 				.hide(myFragment);
@@ -112,6 +123,7 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case 2:
 			clickRadarFrameLayout();
+			
 			if (!radarFragment.isAdded()) {// 动态加载
 				fragmentTransaction.add(R.id.container, radarFragment);
 				fragmentTransaction.show(radarFragment).commit();
@@ -137,6 +149,11 @@ public class MainActivity extends FragmentActivity implements
 
 	}
 
+	/**
+	* @param 
+	* @return void
+	* @Description WallFrameLayout按钮背景图片切换
+	*/
 	private void clickWallFrameLayout() {
 		titleText.setText("Wall");
 
@@ -155,6 +172,11 @@ public class MainActivity extends FragmentActivity implements
 		arImageView.setSelected(false);
 	}
 
+	/**
+	* @param 
+	* @return void
+	* @Description RadarFrameLayout按钮背景图片切换
+	*/
 	private void clickRadarFrameLayout() {
 		titleText.setText("Radar");
 
@@ -173,6 +195,11 @@ public class MainActivity extends FragmentActivity implements
 		arImageView.setSelected(false);
 	}
 
+	/**
+	* @param 
+	* @return void
+	* @Description FavourFrameLayout按钮背景图片切换  
+	*/
 	private void clickFavourFrameLayout() {
 		titleText.setText("Favour");
 
@@ -191,6 +218,11 @@ public class MainActivity extends FragmentActivity implements
 		arImageView.setSelected(false);
 	}
 
+	/**
+	* @param 
+	* @return void
+	* @Description MyFrameLayout按钮背景图片切换   
+	*/
 	private void clickMyFrameLayout() {
 		titleText.setText("My");
 
@@ -209,6 +241,11 @@ public class MainActivity extends FragmentActivity implements
 		arImageView.setSelected(false);
 	}
 
+	/**
+	* @param 
+	* @return void
+	* @Description ARFrameLayout  
+	*/
 	private void clickARFrameLayout() {
 		titleText.setText("AR");
 

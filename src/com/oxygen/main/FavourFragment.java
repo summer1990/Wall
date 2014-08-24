@@ -1,4 +1,6 @@
-package com.oxygen.wall;
+package com.oxygen.main;
+
+import com.oxygen.wall.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,13 +10,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 
+/**
+* @ClassName FavourFragment
+* @Description 收藏界面Fragment
+* @author oxygen
+* @email oxygen0106@163.com
+* @date 2014-8-18 下午09:33:01
+*/
 public class FavourFragment extends Fragment {
 	 private TextView tv;  
 	  
 	    @Override  
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
 	            Bundle savedInstanceState) {  
-	        return inflater.inflate(R.layout.favour, container, false);  
+	        return inflater.inflate(R.layout.favour_fragment, container, false);  
 	    }  
 	  
 	    @Override  

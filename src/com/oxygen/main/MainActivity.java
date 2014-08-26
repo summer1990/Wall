@@ -2,6 +2,7 @@ package com.oxygen.main;
 
 import com.oxygen.wall.R;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -58,7 +59,8 @@ public class MainActivity extends FragmentActivity implements
 		setContentView(R.layout.main);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE,
 				R.layout.title_bar);// 加载自定义标题栏
-
+//		ActionBar actionBar = getActionBar();//API Level 11
+		
 		titleText = (TextView) findViewById(R.id.title_tv);// 标题栏TextView
 
 		wallFrameLayout = (FrameLayout) findViewById(R.id.framelayout_wall);// 菜单按钮
@@ -99,7 +101,7 @@ public class MainActivity extends FragmentActivity implements
 		myFragment = fragmentManager.findFragmentById(R.id.myfragment);
 
 		fragmentTransaction = fragmentManager.beginTransaction()
-				.hide(wallFragment).hide(radarFragment).hide(favourFragment)
+				.hide(wallFragment).hide(favourFragment)
 				.hide(myFragment);//隐藏Fragment
 		fragmentTransaction.show(wallFragment).commit();//默认显示wallFragment
 	}
@@ -125,7 +127,7 @@ public class MainActivity extends FragmentActivity implements
 			clickRadarFrameLayout();
 			
 			if (!radarFragment.isAdded()) {// 动态加载
-				fragmentTransaction.add(R.id.container, radarFragment);
+				fragmentTransaction.add(R.id.fragment_container, radarFragment);
 				fragmentTransaction.show(radarFragment).commit();
 			} else {
 				fragmentTransaction.show(radarFragment).commit();

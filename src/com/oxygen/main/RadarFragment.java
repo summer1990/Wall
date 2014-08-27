@@ -124,19 +124,19 @@ public class RadarFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.radar_fragment, container, false);
+		mapViewContainer = (FrameLayout) view
+				.findViewById(R.id.mapview_container);
 
 		mMapStatus = new MapStatus.Builder()
 				.target(new LatLng(mCurrentLantitude, mCurrentLongitude))
 				.zoom(16f).build();// 设置地图显示的起始位置和默认缩放比例
-		options = new BaiduMapOptions().zoomControlsEnabled(false).scaleControlEnabled(false).mapStatus(
-				mMapStatus);// 不显示缩放控件和比例尺
+		options = new BaiduMapOptions().zoomControlsEnabled(false)
+				.scaleControlEnabled(false).mapStatus(mMapStatus);// 不显示缩放控件和比例尺
 		mapView = SupportMapFragment.newInstance(options);
-		FragmentManager manager = getChildFragmentManager();//嵌套Fragment
-		manager.beginTransaction().add(R.id.mapview_container, mapView).commit();//显示地图
-		mapViewContainer = (FrameLayout) view
-				.findViewById(R.id.mapview_container);
-		
-		mapViewContainer.addView(new Button(activity));
+		FragmentManager manager = getChildFragmentManager();// 嵌套Fragment
+		manager.beginTransaction().add(R.id.mapview_container, mapView)
+				.commit();// 显示地图
+
 		return view;
 	}
 
@@ -160,9 +160,9 @@ public class RadarFragment extends Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+
 		addRadarView();// 显示雷达View动画
-		initMyLocation();// 初始化LocationClient,设置监听器和定位参数实例，开启定位功能
+
 		new Thread(new GetWallsInfoThread()).start();// 开启获取服务器留言板线程
 		// Debug.stopMethodTracing();//TraceView调试结束
 	}
@@ -185,16 +185,17 @@ public class RadarFragment extends Fragment {
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
-			
+
 			if (msg.what == WALLS_INIT_OK) {
 				// TODO
+				initMyLocation();// 初始化LocationClient,设置监听器和定位参数实例，开启定位功能
 				initOverlay();// 获取留言板信息完毕，在地图上添加Marker图层
 				RADAR_SWEEP_STOP = 1;// 告诉RadarRefresh线程应该尽快结束扫描
 			} else if (msg.what == RADAR_VIEW_GONE) {
 				radarAnimExit = AnimationUtils.loadAnimation(activity,
 						R.anim.radar_anim_exit);
 				radarView.startAnimation(radarAnimExit);// 加载退出动画
-	
+
 				radarView.setVisibility(View.GONE);// 雷达消失
 			}
 		}
@@ -206,6 +207,12 @@ public class RadarFragment extends Fragment {
 	 * @Description 初始化 LocationClient及参数，添加定位监听
 	 */
 	public void initMyLocation() {
+
+		// mapView = SupportMapFragment.newInstance(options);
+
+		// FragmentManager manager = getChildFragmentManager();// 嵌套Fragment
+		// manager.beginTransaction().add(R.id.mapview_container, mapView)
+		// .commit();// 显示地图
 		baiduMap = mapView.getBaiduMap();// MapView的管理器 baiduMap
 		mLocationClient = new LocationClient(activity.getApplicationContext());
 		myListener = new MyLocationListener();// 实例化定位监听类对象
@@ -221,9 +228,9 @@ public class RadarFragment extends Fragment {
 				mCurrentMarkerIcon);
 		baiduMap.setMyLocationConfigeration(config);
 		baiduMap.setMyLocationEnabled(true);// 开启定位功能
-		
-		LayoutInflater.from(activity).inflate(R.layout.radarfragment_btn_location,
-				mapViewContainer, true);
+
+		LayoutInflater.from(activity).inflate(
+				R.layout.radarfragment_btn_location, mapViewContainer, true);
 		btnLocation = (Button) getView().findViewById(R.id.btn_location);
 		btnLocation.setOnClickListener(new OnClickListener() {
 

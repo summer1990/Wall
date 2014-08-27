@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -26,8 +27,8 @@ public class MainActivity extends FragmentActivity implements
 		View.OnClickListener {
 
 	public Fragment wallFragment;
-//	public RadarFragment radarFragment;
-	public Fragment radarFragment;
+	public RadarFragment radarFragment;
+//	public Fragment radarFragment;
 	public Fragment favourFragment;
 	public Fragment myFragment;
 
@@ -53,6 +54,8 @@ public class MainActivity extends FragmentActivity implements
 
 	FragmentManager fragmentManager;
 	FragmentTransaction fragmentTransaction;
+	
+	LinearLayout layoutRadarFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +67,7 @@ public class MainActivity extends FragmentActivity implements
 //		ActionBar actionBar = getActionBar();//API Level 11
 		
 		titleText = (TextView) findViewById(R.id.title_tv);// 标题栏TextView
+		titleText.setText("Wall");// 设置TitleBar的TextView
 
 		wallFrameLayout = (FrameLayout) findViewById(R.id.framelayout_wall);// 菜单按钮
 		radarFrameLayout = (FrameLayout) findViewById(R.id.framelayout_radar);
@@ -93,16 +97,17 @@ public class MainActivity extends FragmentActivity implements
 		favourImageLine = (ImageView) findViewById(R.id.favour_image_line);
 		myImageLine = (ImageView) findViewById(R.id.my_image_line);
 
-
-		titleText.setText("Wall");// 设置TitleBar的TextView
+		radarFragment = new RadarFragment();
+		
+		
 		fragmentManager = getSupportFragmentManager();// 获得FragmentManager
 		wallFragment = fragmentManager.findFragmentById(R.id.wallfragment);// 加载Fragment
-		radarFragment = fragmentManager.findFragmentById(R.id.radarfragment);
+//		radarFragment = fragmentManager.findFragmentById(R.id.radarfragment);
 		favourFragment = fragmentManager.findFragmentById(R.id.favourfragment);
 		myFragment = fragmentManager.findFragmentById(R.id.myfragment);
-
+		
 		fragmentTransaction = fragmentManager.beginTransaction()
-				.hide(wallFragment).hide(radarFragment).hide(favourFragment)
+				.hide(wallFragment).hide(favourFragment)
 				.hide(myFragment);//隐藏Fragment
 		fragmentTransaction.show(wallFragment).commit();//默认显示wallFragment
 	}
@@ -127,13 +132,12 @@ public class MainActivity extends FragmentActivity implements
 		case 2:
 			clickRadarFrameLayout();
 
-//			if (!radarFragment.isAdded()) {// 动态加载
-//				fragmentTransaction.add(R.id.fragment_container, radarFragment);
-//				fragmentTransaction.show(radarFragment).commit();
-//			} else {
-//				fragmentTransaction.show(radarFragment).commit();
-//			}
-			fragmentTransaction.show(radarFragment).commit();
+			if (!radarFragment.isAdded()) {// 动态加载
+				fragmentTransaction.add(R.id.fragment_container, radarFragment);
+				fragmentTransaction.show(radarFragment).commit();
+			} else {
+				fragmentTransaction.show(radarFragment).commit();
+			}
 			break;
 
 		case 3:
@@ -269,4 +273,10 @@ public class MainActivity extends FragmentActivity implements
 		favourImageLine.setSelected(false);
 	}
 
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+	}
 }

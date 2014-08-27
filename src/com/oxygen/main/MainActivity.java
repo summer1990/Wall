@@ -4,6 +4,7 @@ import com.oxygen.wall.R;
 
 import android.app.ActionBar;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -25,7 +26,8 @@ public class MainActivity extends FragmentActivity implements
 		View.OnClickListener {
 
 	public Fragment wallFragment;
-	public RadarFragment radarFragment;
+//	public RadarFragment radarFragment;
+	public Fragment radarFragment;
 	public Fragment favourFragment;
 	public Fragment myFragment;
 
@@ -91,17 +93,16 @@ public class MainActivity extends FragmentActivity implements
 		favourImageLine = (ImageView) findViewById(R.id.favour_image_line);
 		myImageLine = (ImageView) findViewById(R.id.my_image_line);
 
-		radarFragment = new RadarFragment();// 使用代码初始化radarFragment，动态加载
 
 		titleText.setText("Wall");// 设置TitleBar的TextView
 		fragmentManager = getSupportFragmentManager();// 获得FragmentManager
 		wallFragment = fragmentManager.findFragmentById(R.id.wallfragment);// 加载Fragment
-		// fragmentManager.findFragmentById(R.id.radarfragment);//改为动态加载,见上
+		radarFragment = fragmentManager.findFragmentById(R.id.radarfragment);
 		favourFragment = fragmentManager.findFragmentById(R.id.favourfragment);
 		myFragment = fragmentManager.findFragmentById(R.id.myfragment);
 
 		fragmentTransaction = fragmentManager.beginTransaction()
-				.hide(wallFragment).hide(favourFragment)
+				.hide(wallFragment).hide(radarFragment).hide(favourFragment)
 				.hide(myFragment);//隐藏Fragment
 		fragmentTransaction.show(wallFragment).commit();//默认显示wallFragment
 	}
@@ -125,14 +126,16 @@ public class MainActivity extends FragmentActivity implements
 			break;
 		case 2:
 			clickRadarFrameLayout();
-			
-			if (!radarFragment.isAdded()) {// 动态加载
-				fragmentTransaction.add(R.id.fragment_container, radarFragment);
-				fragmentTransaction.show(radarFragment).commit();
-			} else {
-				fragmentTransaction.show(radarFragment).commit();
-			}
+
+//			if (!radarFragment.isAdded()) {// 动态加载
+//				fragmentTransaction.add(R.id.fragment_container, radarFragment);
+//				fragmentTransaction.show(radarFragment).commit();
+//			} else {
+//				fragmentTransaction.show(radarFragment).commit();
+//			}
+			fragmentTransaction.show(radarFragment).commit();
 			break;
+
 		case 3:
 			clickFavourFrameLayout();
 

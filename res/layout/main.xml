@@ -23,6 +23,12 @@
         android:layout_height="fill_parent"/>
 
 
+        <fragment
+        android:id="@+id/radarfragment"
+        android:name="com.oxygen.main.RadarFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"/>
+        
     <fragment
         android:id="@+id/favourfragment"
         android:name="com.oxygen.main.FavourFragment"

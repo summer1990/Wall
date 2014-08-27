@@ -25,6 +25,7 @@ import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.map.MyLocationConfigeration.LocationMode;
+import com.baidu.mapapi.map.SupportMapFragment;
 import com.baidu.mapapi.model.LatLng;
 import com.oxygen.map.RadarView;
 import com.oxygen.wall.R;
@@ -35,9 +36,11 @@ import com.oxygen.wall.WallInfo;
 import android.app.Activity;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Debug;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,12 +64,12 @@ import android.widget.TextView;
  * @date 2014-8-18 下午09:31:15
  */
 public class RadarFragment extends Fragment {
-	
+
 	int WALLS_INIT_OK = 1;// 从服务器获取留言板数据完成
 	int RADAR_SWEEP_STOP = -1;// 停止雷达扫描
 	int RADAR_VIEW_GONE = 3;// 设置radarView消失
 	Activity activity;
-	public MapView mapView;
+	public SupportMapFragment mapView;
 	BaiduMap baiduMap;
 	BaiduMapOptions options;
 	MapStatus mMapStatus;
@@ -102,6 +105,7 @@ public class RadarFragment extends Fragment {
 	@Override
 	public void onAttach(Activity activity) {
 		// TODO Auto-generated method stub
+		// Debug.startMethodTracing();//TraceView调试开始
 		super.onAttach(activity);
 		this.activity = activity;
 	}
@@ -124,19 +128,15 @@ public class RadarFragment extends Fragment {
 		mMapStatus = new MapStatus.Builder()
 				.target(new LatLng(mCurrentLantitude, mCurrentLongitude))
 				.zoom(16f).build();// 设置地图显示的起始位置和默认缩放比例
-		options = new BaiduMapOptions().zoomControlsEnabled(false).mapStatus(
-				mMapStatus);// 不显示缩放控件
-		mapView = new MapView(activity, options);
+		options = new BaiduMapOptions().zoomControlsEnabled(false).scaleControlEnabled(false).mapStatus(
+				mMapStatus);// 不显示缩放控件和比例尺
+		mapView = SupportMapFragment.newInstance(options);
+		FragmentManager manager = getChildFragmentManager();//嵌套Fragment
+		manager.beginTransaction().add(R.id.mapview_container, mapView).commit();//显示地图
 		mapViewContainer = (FrameLayout) view
-				.findViewById(R.id.mapView_container);
-		mapViewContainer.addView(mapView);
-		View v = inflater.inflate(R.layout.radarfragment_btn_location,
-				mapViewContainer, true);
-		// layoutBtnLocation = (LinearLayout)
-		// v.findViewById(R.id.layout_btn_location);
-		mapView.removeViewAt(1);// 去掉 Baidu LOGO
-		mapView.removeViewAt(2);// 去掉 比例尺
-
+				.findViewById(R.id.mapview_container);
+		
+		mapViewContainer.addView(new Button(activity));
 		return view;
 	}
 
@@ -160,12 +160,11 @@ public class RadarFragment extends Fragment {
 	public void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		mapView.onResume();// MapView需要重写Activity的生命周期方法
-
+		
 		addRadarView();// 显示雷达View动画
 		initMyLocation();// 初始化LocationClient,设置监听器和定位参数实例，开启定位功能
 		new Thread(new GetWallsInfoThread()).start();// 开启获取服务器留言板线程
-
+		// Debug.stopMethodTracing();//TraceView调试结束
 	}
 
 	@Override
@@ -174,21 +173,19 @@ public class RadarFragment extends Fragment {
 		super.onPause();
 		baiduMap.setMyLocationEnabled(false);
 		mLocationClient.stop();
-		// myOrientationListener.stop();
-		mapView.onPause();
 	}
 
 	@Override
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		mapView.onDestroy();
 		mCurrentMarkerIcon.recycle();// 回收 bitmap 资源
 		wallMarkerIcon.recycle();// 回收 bitmap 资源
 	}
 
 	private Handler handler = new Handler() {
 		public void handleMessage(Message msg) {
+			
 			if (msg.what == WALLS_INIT_OK) {
 				// TODO
 				initOverlay();// 获取留言板信息完毕，在地图上添加Marker图层
@@ -196,30 +193,12 @@ public class RadarFragment extends Fragment {
 			} else if (msg.what == RADAR_VIEW_GONE) {
 				radarAnimExit = AnimationUtils.loadAnimation(activity,
 						R.anim.radar_anim_exit);
-				radarView.startAnimation(radarAnimExit);//加载退出动画
-				
-				radarView.setVisibility(View.GONE);//雷达消失
+				radarView.startAnimation(radarAnimExit);// 加载退出动画
+	
+				radarView.setVisibility(View.GONE);// 雷达消失
 			}
 		}
 	};
-
-	/**
-	 * @ClassName GetWallsInfoThread
-	 * @Description 从服务器获取留言板信息网络线程
-	 */
-	private class GetWallsInfoThread implements Runnable {
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-
-			getAroundWalls();// 本地模拟数据
-
-			// TODO 添加判断：当获取留言板信息完毕，发送该消息
-			Message m = Message.obtain();
-			m.what = WALLS_INIT_OK;
-			handler.sendMessage(m);
-		}
-	}
 
 	/**
 	 * @param
@@ -227,7 +206,7 @@ public class RadarFragment extends Fragment {
 	 * @Description 初始化 LocationClient及参数，添加定位监听
 	 */
 	public void initMyLocation() {
-		baiduMap = mapView.getMap();// MapView的管理器 baiduMap
+		baiduMap = mapView.getBaiduMap();// MapView的管理器 baiduMap
 		mLocationClient = new LocationClient(activity.getApplicationContext());
 		myListener = new MyLocationListener();// 实例化定位监听类对象
 		mLocationClient.registerLocationListener(myListener);// 注册定位监听
@@ -242,7 +221,9 @@ public class RadarFragment extends Fragment {
 				mCurrentMarkerIcon);
 		baiduMap.setMyLocationConfigeration(config);
 		baiduMap.setMyLocationEnabled(true);// 开启定位功能
-
+		
+		LayoutInflater.from(activity).inflate(R.layout.radarfragment_btn_location,
+				mapViewContainer, true);
 		btnLocation = (Button) getView().findViewById(R.id.btn_location);
 		btnLocation.setOnClickListener(new OnClickListener() {
 
@@ -257,8 +238,8 @@ public class RadarFragment extends Fragment {
 								mCurrentLongitude));
 				baiduMap.animateMapStatus(u);
 
-				 radarSweepThread.interrupt();
-				 radarView.setVisibility(View.VISIBLE);// 设置可见
+				radarSweepThread.interrupt();
+				radarView.setVisibility(View.VISIBLE);// 设置可见
 				radarView.startAnimation(radarAnimEnter);// 开始进入动画
 				radarSweepThread = new Thread(new RadarRefresh());// 雷达扫描线程
 				radarSweepThread.start();
@@ -317,12 +298,31 @@ public class RadarFragment extends Fragment {
 	 * config = new MyLocationConfigeration( LocationMode.FOLLOWING, true,
 	 * mCurrentMarker); baiduMap.setMyLocationConfigeration(config); } }); }
 	 */
+
+	/**
+	 * @ClassName GetWallsInfoThread
+	 * @Description 从服务器获取留言板信息网络线程
+	 */
+	private class GetWallsInfoThread implements Runnable {
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+
+			getWallsInfo();// 本地模拟数据
+
+			// TODO 添加判断：当获取留言板信息完毕，发送该消息
+			Message m = Message.obtain();
+			m.what = WALLS_INIT_OK;
+			handler.sendMessage(m);
+		}
+	}
+
 	/**
 	 * @param
 	 * @return void
 	 * @Description 获取模拟附近留言板信息 ，本地模拟
 	 */
-	public void getAroundWalls() {
+	public void getWallsInfo() {
 		aroundWalls = new ArrayList<WallInfo>();
 		// aroundWalls.add(new WallInfo(1, 007, new LatLng(39.98871, 116.43234),
 		// 1000));//天安门坐标
@@ -377,7 +377,7 @@ public class RadarFragment extends Fragment {
 				// TODO Auto-generated method stub
 				LayoutInflater inflater = LayoutInflater.from(activity);
 				ViewGroup root = (ViewGroup) getView().findViewById(
-						R.id.mapView_container);
+						R.id.mapview_container);
 				View v = inflater.inflate(R.layout.marker_popup, root, false);
 
 				markerPopupWindow = (LinearLayout) v
@@ -443,7 +443,6 @@ public class RadarFragment extends Fragment {
 		radarSweepThread = new Thread(new RadarRefresh());// 雷达扫描线程
 		radarSweepThread.start();
 
-
 	}
 
 	/**
@@ -452,14 +451,13 @@ public class RadarFragment extends Fragment {
 	 */
 	private class RadarRefresh implements Runnable {
 		int i = 1;
-		
+
 		int flag = 0;
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			System.out.println(">>>>>>>>>>>>>>   "+i); 
-			
+
 			while (!Thread.currentThread().isInterrupted() && i > 0) {
 				try {
 					radarView.postInvalidate();// 刷新radarView, 执行onDraw();
@@ -477,9 +475,8 @@ public class RadarFragment extends Fragment {
 				}
 
 			}
-			
-			System.out.println("--------------------" + i);
-			if (i ==0) {
+
+			if (i == 0) {
 				Message mGone = Message.obtain();
 				mGone.what = RADAR_VIEW_GONE;
 				handler.sendMessage(mGone);

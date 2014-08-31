@@ -63,8 +63,11 @@ public final class R {
         public static final int wall_marker=0x7f02001e;
     }
     public static final class id {
-        public static final int RadarView=0x7f09001e;
-        public static final int btn_location=0x7f090020;
+        public static final int RadarView=0x7f090025;
+        public static final int btn_1=0x7f090020;
+        public static final int btn_2=0x7f090021;
+        public static final int btn_3=0x7f090022;
+        public static final int btn_location=0x7f090027;
         public static final int favour_image_line=0x7f090014;
         public static final int favourfragment=0x7f090003;
         public static final int fragment_container=0x7f090001;
@@ -79,19 +82,23 @@ public final class R {
         public static final int image_my=0x7f090016;
         public static final int image_radar=0x7f09000c;
         public static final int image_wall=0x7f090008;
-        public static final int layout_btn_location=0x7f09001f;
+        public static final int layout_btn_location=0x7f090026;
+        public static final int layout_mid_btn=0x7f09001f;
+        public static final int layout_my_image=0x7f09001c;
         public static final int linearlayout=0x7f090006;
-        public static final int mapview_container=0x7f09001c;
+        public static final int mapview_container=0x7f090023;
         public static final int marker_arrow=0x7f09001b;
         public static final int marker_popup_container=0x7f090019;
+        public static final int my_image=0x7f09001d;
         public static final int my_image_line=0x7f090018;
         public static final int myfragment=0x7f090004;
-        public static final int radarViewLayout=0x7f09001d;
+        public static final int radarViewLayout=0x7f090024;
         public static final int radar_image_line=0x7f09000e;
-        public static final int title_tv=0x7f090021;
+        public static final int title_tv=0x7f090028;
         public static final int tv=0x7f090000;
         public static final int tv_favour=0x7f090013;
         public static final int tv_my=0x7f090017;
+        public static final int tv_name=0x7f09001e;
         public static final int tv_radar=0x7f09000d;
         public static final int tv_wall=0x7f090009;
         public static final int tv_wallId=0x7f09001a;

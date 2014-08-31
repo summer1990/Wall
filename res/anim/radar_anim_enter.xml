@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 雷达动画移动动画 -->
+    <translate
+        android:duration="2000"
+        android:fromXDelta="-20%p"
+        android:fromYDelta="-10%p"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toXDelta="15%p"
+        android:toYDelta="-10%p" />
+    
+    <translate
+        android:startOffset="2000"
+        android:duration="2000" 
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:toXDelta="5%p"
+        android:toYDelta="20%p" />
+    
+    <translate
+        android:startOffset="4000"
+        android:duration="2000"
+        android:toXDelta="-20%p"
+        android:toYDelta="-10%p"
+        android:interpolator="@android:anim/decelerate_interpolator"/>
+    
+   <!-- 雷达动画由大到正常 -->
+   
+    <scale
+        android:duration="2000"
+        android:fromXScale="1.5"
+        android:fromYScale="1.5"
+        android:interpolator="@android:anim/decelerate_interpolator"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="6000"
+        android:toXScale="1.0"
+        android:toYScale="1.0" />
+
+</set>
